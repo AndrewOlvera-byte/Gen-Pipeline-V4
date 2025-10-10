@@ -1,0 +1,8 @@
+loss:
+  name: "ppo"
+  args:
+    clip_range: 0.2
+    value_coef: 0.5
+    entropy_coef: 0.0
+    gamma: 0.99
+    gae_lambda: 0.95

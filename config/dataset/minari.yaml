@@ -1,0 +1,5 @@
+dataset:
+  name: "minari"
+  path: null
+  batch_size: 128
+  num_workers: 4

@@ -1,0 +1,8 @@
+env:
+  name: "gym_robotics"
+  id: "FetchReach-v3"
+  kwargs: {}
+  transforms:
+    obs_norm: true
+    action_norm: true
+    reward_scale: 1.0

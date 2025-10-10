@@ -1,0 +1,4 @@
+loss:
+  name: "bc_gaussian_nll"
+  args:
+    action_smooth_coef: 0.0

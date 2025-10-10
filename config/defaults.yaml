@@ -1,0 +1,18 @@
+defaults:
+  - exp: fetch_bc
+  - modes: train
+  - speed: default
+  - seed: default
+  - logger: wandb
+  - _self_
+
+hydra:
+  run:
+    dir: "outputs/${exp.name}/${now:%Y%m%d_%H%M%S}"
+  output_subdir: null
+
+exp:
+  name: "debug"
+  desc: ""
+  tags: []
+  notes: ""

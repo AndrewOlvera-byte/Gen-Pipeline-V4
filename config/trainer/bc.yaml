@@ -1,0 +1,6 @@
+trainer:
+  name: "bc"
+  max_steps: 100000
+  eval_every: 5000
+  save_every: 20000
+  checkpoint_dir: "outputs/${exp.name}/ckpts"

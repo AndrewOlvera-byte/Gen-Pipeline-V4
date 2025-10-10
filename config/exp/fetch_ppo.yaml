@@ -1,0 +1,22 @@
+defaults:
+  - trainer: ppo
+  - env: fetch_reach
+  - model: mlp_gauss
+  - loss: ppo
+  - collector: sync
+  - optimizer: adam
+  - evaluator: default_eval
+  - _self_
+
+exp:
+  name: "fetch_ppo"
+
+trainer:
+  max_steps: 100000
+  eval_every: 5000
+  save_every: 20000
+
+collector:
+  frames_per_batch: 2048
+  total_frames: 1000000
+  policy_update_steps: 4

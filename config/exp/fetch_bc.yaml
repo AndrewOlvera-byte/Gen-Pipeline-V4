@@ -1,0 +1,21 @@
+defaults:
+  - trainer: bc
+  - dataset: minari
+  - model: mlp_gauss
+  - loss: bc_gaussian_nll
+  - optimizer: adamw
+  - evaluator: default_eval
+  - _self_
+
+exp:
+  name: "fetch_bc"
+
+dataset:
+  path: "data/fetch_reach_minari"
+  batch_size: 128
+  num_workers: 4
+
+trainer:
+  max_steps: 30000
+  eval_every: 5000
+  save_every: 15000

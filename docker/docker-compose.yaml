@@ -1,0 +1,42 @@
+version: "3.9"
+
+# Reusable base settings (DRY via anchors)
+x-trainer-common: &trainer-common
+  build:
+    context: ..
+    dockerfile: docker/Dockerfile
+    args:
+      BASE_IMAGE: ${BASE_IMAGE-}   # optional override at build time
+  image: rlds-trainer:latest
+  working_dir: /app
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - capabilities: ["gpu"]
+  # local Docker (not Swarm) can also use: gpus: all
+  volumes:
+    - ../:/app
+    - ../outputs:/app/outputs
+  environment:
+    - WANDB_MODE=${WANDB_MODE:-online}
+    - WANDB_API_KEY=${WANDB_API_KEY:-}
+    - MUJOCO_GL=egl
+    - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+    - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:-all}
+
+services:
+
+  # TRAIN service (default)
+  trainer:
+    <<: *trainer-common
+    # Default runs your selected exp from config/defaults.yaml
+    command: ["python", "scripts/train.py"]
+
+  # (Optional) define a SEARCH profile you can enable later
+  # For now it's just a TODO placeholder—no Optuna wiring yet.
+  search:
+    <<: *trainer-common
+    profiles: ["search"]
+    # TODO: when ready, replace with your hydra/optuna multirun command
+    command: ["bash", "-lc", "echo 'TODO search: wire Optuna here'; python scripts/train.py"]

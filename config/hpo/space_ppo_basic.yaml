@@ -1,0 +1,12 @@
+# Search space for PPO (maximize return)
+hpo:
+  direction: "maximize"
+  objective_key: "eval/return_mean"
+  params:
+    optimizer.lr: interval(1e-5, 5e-4, log=True)
+    model.hidden_sizes: choice([ [128,128], [256,256], [256,256,128] ])
+    loss.args.clip_range: choice([0.15, 0.2, 0.3])
+    loss.args.entropy_coef: choice([0.0, 0.005, 0.01])
+    collector.frames_per_batch: choice([1024, 2048, 4096])
+    ppo.epochs: choice([2, 4, 6])
+    ppo.minibatch_size: choice([1024, 2048, 4096])

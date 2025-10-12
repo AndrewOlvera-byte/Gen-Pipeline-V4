@@ -1,0 +1,9 @@
+# Search space for BC (minimize validation NLL)
+hpo:
+  direction: "minimize"
+  objective_key: "eval/nll_mean"
+  params:
+    optimizer.lr: interval(1e-5, 3e-3, log=True)
+    model.hidden_sizes: choice([ [128,128], [256,256], [256,256,128] ])
+    loss.args.action_smooth_coef: choice([0.0, 0.001, 0.01])
+    dataset.batch_size: choice([128, 256, 512])

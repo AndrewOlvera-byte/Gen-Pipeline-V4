@@ -87,6 +87,9 @@ def main():
     dataset_dir: Path = data_dir / dataset_id
     dataset_dir.mkdir(parents=True, exist_ok=True)
 
+    # Force Minari to save datasets strictly under repo_root/data
+    os.environ["MINARI_DATASET_PATH"] = str(data_dir)
+
     # Progress bars
     ep_bar, step_bar = create_progress(total_episodes=episodes)
 

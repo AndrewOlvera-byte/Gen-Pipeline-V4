@@ -7,8 +7,8 @@ import gymnasium as gym
 import minari
 import numpy as np
 
-from envs import make_fetchreach_env, HeuristicFetchReachExpert
-from utils import (
+from synth_data.envs import make_fetchreach_env, HeuristicFetchReachExpert
+from synth_data.utils import (
     create_progress,
     episode_progress,
     summarize_dataset_quality,

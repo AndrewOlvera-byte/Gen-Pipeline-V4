@@ -8,14 +8,15 @@ defaults:
   - _self_
 
 exp:
-  name: "fetch_bc"
+  name: "quick_debug_bc"
 
 dataset:
   path: "data/fetchreach_v2_expert_bc_v1"
-  batch_size: 128
-  num_workers: 4
+  batch_size: 32
+  num_workers: 2
 
 trainer:
-  max_steps: 30000
-  eval_every: 5000
-  save_every: 15000
+  max_steps: 1000
+  eval_every: 200
+  save_every: 500
+

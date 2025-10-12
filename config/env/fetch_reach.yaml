@@ -1,4 +1,4 @@
 env:
   name: "torchrl_gym"
-  id: "FetchReach-v3"
+  id: "FetchReach-v2"
   kwargs: {}

@@ -1,0 +1,23 @@
+defaults:
+  - trainer: ppo
+  - env: fetch_reach
+  - model: td_actor_critic
+  - loss: ppo
+  - collector: torchrl_sync
+  - optimizer: adam
+  - evaluator: rl_eval_basic
+  - _self_
+
+exp:
+  name: "quick_debug_ppo"
+
+trainer:
+  max_steps: 2000
+  eval_every: 500
+  save_every: 1000
+
+collector:
+  frames_per_batch: 256
+  total_frames: 2000
+  policy_update_steps: 1
+

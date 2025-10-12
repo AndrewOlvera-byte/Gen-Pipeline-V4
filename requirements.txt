@@ -6,7 +6,7 @@ torchaudio==2.4.*
 torchrl==0.4.*               # matches Torch 2.4
 tensordict==0.4.*            # TorchRL dependency (explicitly pin to same minor)
 gymnasium==1.0.*             # modern Gym API
-gymnasium-robotics>=1.2.3    # FetchReach-v3 and similar robotics envs
+gymnasium-robotics>=1.2.2    # FetchReach-v3 and similar robotics envs
 minari==0.4.*                # for offline RL / BC datasets
 dm_env==1.6                  # used by some TorchRL wrappers
 

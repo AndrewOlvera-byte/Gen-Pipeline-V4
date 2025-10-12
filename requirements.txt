@@ -1,5 +1,4 @@
 # === Core ===
-torch==2.4.*
 torchvision==0.19.*          # optional but useful
 torchaudio==2.4.*
 

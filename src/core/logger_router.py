@@ -46,6 +46,8 @@ class WandbLogger(BaseLogger):
 class OfflineLogger(BaseLogger):
     """Simple JSONL logger in outputs dir."""
     def __init__(self, cfg):
+        # Respect Hydra's per-run working dir; also ensure outputs under repo root
+        # Hydra sets CWD to hydra.run.dir; logs will be created there.
         outdir = Path("outputs") / (cfg.exp.name or "run")
         outdir.mkdir(parents=True, exist_ok=True)
         self._path = outdir / "metrics.jsonl"

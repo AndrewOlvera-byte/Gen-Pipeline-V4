@@ -17,7 +17,7 @@ class BCTrainer(BaseTrainer):
         - logger: BaseLogger (.log, .should_save, .finish)
         - evaluator: callable(model) -> dict  (optional)
     """
-    required_components = ["dataset", "model", "loss", "optimizer", "logger", "evaluator", "datacoll"]
+    required_components = ["dataset", "model", "loss", "optimizer", "evaluator", "datacoll"]
 
     def fit(self):
         cfg = self.cfg

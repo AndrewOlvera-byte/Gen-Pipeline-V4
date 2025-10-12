@@ -31,7 +31,6 @@ class TorchRLPPOFactory:
         )
         # Use TorchRL's value estimator to compute advantage/returns in-place
         loss_module.set_keys(advantage_key="advantage", value_target_key="value_target")
-        loss_module.gamma = gamma
-        loss_module.lmbda = lmbda
-        loss_module.value_estimator = "gae"  # enabling GAE inside loss module
+        # Build value estimator (GAE) inside the loss module
+        loss_module.make_value_estimator("gae", gamma=gamma, lmbda=lmbda)
         return loss_module

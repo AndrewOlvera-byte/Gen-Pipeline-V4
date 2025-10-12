@@ -1,8 +1,4 @@
 env:
-  name: "gym_robotics"
+  name: "torchrl_gym"
   id: "FetchReach-v3"
   kwargs: {}
-  transforms:
-    obs_norm: true
-    action_norm: true
-    reward_scale: 1.0

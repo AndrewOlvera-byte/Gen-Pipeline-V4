@@ -47,13 +47,27 @@ class MinariDatasetFactory:
           batch_size, num_workers (used later by datacoll/dataloader)
         """
         import minari
-        if cfg_node.path and ("/" in cfg_node.path or "\\" in cfg_node.path):
-            ds = minari.load_dataset_from_path(cfg_node.path)
+        # Resolve dataset path:
+        # - If cfg_node.path points to a directory, load from path
+        # - Else treat it as Minari dataset id
+        import os
+        from pathlib import Path
+        try:
+            from hydra.utils import get_original_cwd
+            repo_root = Path(get_original_cwd())
+        except Exception:
+            repo_root = Path.cwd()
+
+        if cfg_node.path:
+            p = Path(str(cfg_node.path))
+            if not p.is_absolute():
+                p = repo_root / p
+            if p.is_dir():
+                ds = minari.load_dataset_from_path(str(p))
+            else:
+                ds = minari.load_dataset(str(p))
         else:
-            # if path is an ID registered in ~/.minari/datasets
-            ds = minari.load_dataset(cfg_node.path) if cfg_node.path else None
-            if ds is None:
-                raise ValueError("Minari path/ID required for dataset=minari")
+            raise ValueError("Minari path/ID required for dataset=minari")
 
         # save both splits for evaluator; trainer/datacoll will pick "train"
         train = _MinariTorchDataset(ds, split="train")

@@ -18,11 +18,11 @@ def main(cfg: DictConfig) -> float:
     # Both BC and PPO trainers already hold evaluator & model in components
     evaluator = trainer.components.get("evaluator", None)
     model = trainer.components.get("model", None)
-    if evaluator and model:
+    objective_key = getattr(getattr(cfg, "hpo", {}), "objective_key", "") or ""
+    if evaluator and model and objective_key:
         metrics = evaluator(model) or {}
-        key = cfg.hpo.objective_key
-        if key in metrics:
-            return float(metrics[key])
+        if objective_key in metrics:
+            return float(metrics[objective_key])
     # If no metric found, return 0.0 so the trial doesn't crash
     return 0.0
 

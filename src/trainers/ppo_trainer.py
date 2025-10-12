@@ -7,7 +7,7 @@ from src.core.trainer_base import BaseTrainer
 
 @register("trainer", "ppo")
 class PPOTrainer(BaseTrainer):
-    required_components = ["env", "model", "loss", "collector", "optimizer", "logger", "evaluator"]
+    required_components = ["env", "model", "loss", "collector", "optimizer", "evaluator"]
 
     def fit(self):
         cfg = self.cfg

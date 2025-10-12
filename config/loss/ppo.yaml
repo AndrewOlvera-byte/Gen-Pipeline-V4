@@ -1,5 +1,5 @@
 loss:
-  name: "ppo"
+  name: "torchrl_ppo"
   args:
     clip_range: 0.2
     value_coef: 0.5

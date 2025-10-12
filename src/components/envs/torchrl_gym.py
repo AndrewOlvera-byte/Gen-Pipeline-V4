@@ -12,7 +12,7 @@ class TorchRLGymFactory:
         Builds a TorchRL TransformedEnv wrapping a Gymnasium env.
         Keys follow TorchRL defaults: "observation", "action", "reward", "done".
         """
-        base = GymEnv(cfg_node.id, frame_skip=1, from_pixels=False, gbs=True, **cfg_node.kwargs)
+        base = GymEnv(cfg_node.id, frame_skip=1, from_pixels=False, **getattr(cfg_node, "kwargs", {}))
         transforms = [DoubleToFloat()]
         # Flatten common dict observations into a single vector
         transforms += [FlattenObservation(keys=["observation"])]

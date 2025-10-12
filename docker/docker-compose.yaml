@@ -38,5 +38,4 @@ services:
   search:
     <<: *trainer-common
     profiles: ["search"]
-    # TODO: when ready, replace with your hydra/optuna multirun command
-    command: ["bash", "-lc", "echo 'TODO search: wire Optuna here'; python scripts/train.py"]
+    command: ["python", "scripts/search.py", "-m", "+hpo=optuna", "+hpo.space=ppo_basic"]

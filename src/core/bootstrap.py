@@ -35,11 +35,11 @@ def bootstrap():
     Keep this list stable; add new component families here when you create them.
     """
     # trainers (bc, ppo, ssl, …)
-    _import_all_from("rlds.trainers")
+    _import_all_from("src.trainers")
 
     # components: envs, datasets, datacolls, models, losses, collectors, replays,
     #             optimizers, evaluators, loggers
-    _import_all_from("rlds.components", subpackages=[
+    _import_all_from("src.components", subpackages=[
         "envs",
         "datasets",
         "datacolls",

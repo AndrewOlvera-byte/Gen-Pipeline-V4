@@ -1,5 +1,6 @@
 dataset:
   name: "minari"
-  path: null
+  # Default to repo-root data dir. Override with dataset ID or absolute path as needed.
+  path: "data"
   batch_size: 128
   num_workers: 4

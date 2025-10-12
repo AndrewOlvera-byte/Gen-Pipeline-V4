@@ -1,5 +1,4 @@
-# CUDA 12.x runtime works well on 50-series GPUs (Ada/Lovelace) and Vast.ai
-ARG BASE_IMAGE=pytorch/pytorch:2.4.0-cuda12.1-cudnn8-runtime
+ARG BASE_IMAGE=pytorch/pytorch:2.7.0-cuda12.8-cudnn9-runtime
 FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -21,7 +20,6 @@ RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
 # project code
 COPY . /app
-RUN pip install -e .
 
 # default command: training entry; Compose or CLI can override freely
 CMD ["python", "scripts/train.py"]

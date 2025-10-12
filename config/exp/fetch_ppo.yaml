@@ -1,11 +1,11 @@
 defaults:
   - trainer: ppo
   - env: fetch_reach
-  - model: mlp_gauss
+  - model: td_actor_critic
   - loss: ppo
-  - collector: sync
+  - collector: torchrl_sync
   - optimizer: adam
-  - evaluator: default_eval
+  - evaluator: rl_eval_basic
   - _self_
 
 exp:

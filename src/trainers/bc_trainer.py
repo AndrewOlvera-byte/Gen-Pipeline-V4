@@ -42,9 +42,28 @@ class BCTrainer(BaseTrainer):
         else:
             from torch.utils.data import DataLoader
             ds = self.components["dataset"]["train"]
+            # resolve dataset cfg from flat or nested locations
+            def _maybe_get(obj, name):
+                try:
+                    return getattr(obj, name)
+                except Exception:
+                    return None
+            def _get_dataset_cfg(cfg):
+                ds = _maybe_get(cfg, "dataset")
+                if ds is not None:
+                    return ds
+                exp = _maybe_get(cfg, "exp")
+                if exp is not None:
+                    ds = _maybe_get(exp, "dataset")
+                    if ds is not None:
+                        return ds
+                return None
+            ds_cfg = _get_dataset_cfg(cfg)
+            bs = int(getattr(ds_cfg, "batch_size", 32)) if ds_cfg is not None else 32
+            nw = int(getattr(ds_cfg, "num_workers", 0)) if ds_cfg is not None else 0
             train_loader = DataLoader(
-                ds, batch_size=cfg.dataset.batch_size, shuffle=True,
-                num_workers=cfg.dataset.num_workers, pin_memory=True, drop_last=True
+                ds, batch_size=bs, shuffle=True,
+                num_workers=nw, pin_memory=True, drop_last=True
             )
 
         # AMP setup
@@ -53,8 +72,30 @@ class BCTrainer(BaseTrainer):
         amp_dtype = torch.bfloat16 if prec == "bf16" else (torch.float16 if prec == "fp16" else None)
         scaler = torch.cuda.amp.GradScaler(enabled=(use_amp and prec == "fp16"))
 
-        max_steps = int(cfg.trainer.max_steps)
-        log_int = int(getattr(cfg.logger, "log_interval", 100))
+        # resolve trainer and logger cfg from flat or nested locations
+        def _maybe_get(obj, name):
+            try:
+                return getattr(obj, name)
+            except Exception:
+                return None
+        def _get_node(cfg_root, key):
+            node = _maybe_get(cfg_root, key)
+            if node is not None and (hasattr(node, "keys") or hasattr(node, "items") or hasattr(node, "__dict__")):
+                return node
+            exp = _maybe_get(cfg_root, "exp")
+            if exp is not None:
+                node = _maybe_get(exp, key)
+                if node is not None:
+                    # some shapes may have key nested again: exp.trainer.trainer
+                    inner = _maybe_get(node, key)
+                    return inner or node
+            return None
+
+        tr_cfg = _get_node(cfg, "trainer")
+        lg_cfg = _get_node(cfg, "logger")
+
+        max_steps = int(getattr(tr_cfg, "max_steps", 1000))
+        log_int = int(getattr(lg_cfg, "log_interval", 100))
         step = 0
         model.train()
 
@@ -110,7 +151,7 @@ class BCTrainer(BaseTrainer):
                     prog.update(0, loss=out.get("loss", 0.0), bc_nll=out.get("bc/nll", 0.0))
 
                 # eval
-                if step % cfg.trainer.eval_every == 0 and evaluator is not None:
+                if step % int(getattr(tr_cfg, "eval_every", 1000)) == 0 and evaluator is not None:
                     eval_metrics = evaluator(model) or {}
                     eval_metrics["step"] = step
                     self.logger.log(eval_metrics)
@@ -134,7 +175,7 @@ class BCTrainer(BaseTrainer):
                                     best_ckpt_path = p
 
                 # checkpoint
-                if step % cfg.trainer.save_every == 0 and self.logger.should_save():
+                if step % int(getattr(tr_cfg, "save_every", 10000)) == 0 and self.logger.should_save():
                     last_ckpt_path = self.save_checkpoint(step)
                     num_checkpoints += 1
 

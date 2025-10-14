@@ -12,12 +12,40 @@ class BaseTrainer:
 
     def __init__(self, cfg, **components):
         self.cfg = cfg
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # resolve accelerator preference
+        accel_pref = str(getattr(cfg.speed, "accelerator", "auto")).lower() if hasattr(cfg, "speed") else "auto"
+        if accel_pref == "cpu":
+            use_cuda = False
+        elif accel_pref == "gpu":
+            use_cuda = torch.cuda.is_available()
+        else:  # auto
+            use_cuda = torch.cuda.is_available()
+        self.device = torch.device("cuda" if use_cuda else "cpu")
         self.components: Dict[str, Any] = components
         apply_speed_flags(cfg.speed)
-        set_seed_everywhere(cfg.seed.seed)
+        # resolve seed from flat or nested config
+        def _maybe_get(obj, name):
+            try:
+                return getattr(obj, name)
+            except Exception:
+                return None
+        seed_node = _maybe_get(cfg, "seed") or _maybe_get(_maybe_get(cfg, "exp"), "seed")
+        seed_value = getattr(seed_node, "seed", 42) if seed_node is not None else 42
+        try:
+            seed_int = int(seed_value)
+        except Exception:
+            seed_int = 42
+        set_seed_everywhere(seed_int)
         self.logger = make_logger(cfg)
-        self.ckpt_dir = Path(cfg.trainer.checkpoint_dir)
+        # resolve trainer cfg for checkpoint dir
+        def _maybe_get(obj, name):
+            try:
+                return getattr(obj, name)
+            except Exception:
+                return None
+        trainer_node = _maybe_get(cfg, "trainer") or _maybe_get(_maybe_get(cfg, "exp"), "trainer")
+        ckpt_dir = getattr(trainer_node, "checkpoint_dir", "outputs/ckpts") if trainer_node is not None else "outputs/ckpts"
+        self.ckpt_dir = Path(ckpt_dir)
         self.ckpt_dir.mkdir(parents=True, exist_ok=True)
 
     def to_device(self, batch: Any) -> Any:
@@ -47,7 +75,7 @@ class BaseTrainer:
 
     def fit(self):
         """
-        Subclasses typically:
+        Subclasses:
          - build loaders/iterators from components
          - for step in range(max_steps): compute loss -> backward -> step
          - use logger.log() and save_checkpoint() as needed

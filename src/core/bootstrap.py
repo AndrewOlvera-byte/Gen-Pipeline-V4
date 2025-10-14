@@ -16,7 +16,12 @@ def _import_all_from(package_name: str, subpackages: Iterable[str] | None = None
     # import leaf modules directly in the package
     if hasattr(pkg, "__path__"):
         for m in pkgutil.walk_packages(pkg.__path__, pkg.__name__ + "."):
-            importlib.import_module(m.name)
+            try:
+                importlib.import_module(m.name)
+            except Exception:
+                # Optional components may have extra deps not present for all runs.
+                # Ignore import failures so that unrelated experiments (e.g., BC) can proceed.
+                continue
 
     # import selected subpackages (and their descendants)
     if subpackages:
@@ -27,7 +32,10 @@ def _import_all_from(package_name: str, subpackages: Iterable[str] | None = None
                 continue
             if hasattr(subpkg, "__path__"):
                 for m in pkgutil.walk_packages(subpkg.__path__, subpkg.__name__ + "."):
-                    importlib.import_module(m.name)
+                    try:
+                        importlib.import_module(m.name)
+                    except Exception:
+                        continue
 
 def bootstrap():
     """

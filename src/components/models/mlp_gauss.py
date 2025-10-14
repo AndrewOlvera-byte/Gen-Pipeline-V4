@@ -30,7 +30,6 @@ class DiagGaussianTanh(nn.Module):
         base = Normal(mu, std)
         dist = TransformedDistribution(base, [TanhTransform(cache_size=1)])
         dist = Independent(dist, 1)
-        dist.has_rsample = base.has_rsample  # keep rsample capability
         # stash for logging
         dist._mu, dist._std = mu, std
         return dist

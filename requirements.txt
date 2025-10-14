@@ -1,11 +1,10 @@
 # === Core ===
-torchvision==0.19.*          # optional but useful
-torchaudio==2.4.*
+# Use torch/vision/audio from the base image to keep CUDA compatibility
 
 # === Reinforcement Learning stack ===
-torchrl==0.4.*               # matches Torch 2.4
-tensordict==0.4.*            # TorchRL dependency (explicitly pin to same minor)
-gymnasium==1.0.*             # modern Gym API
+torchrl==0.6.*               # matches Torch 2.7
+tensordict==0.6.*            # TorchRL dependency aligned with torch 2.7
+gymnasium==0.29.*            # compatible with Minari 0.4
 gymnasium-robotics>=1.2.2    # FetchReach-v3 and similar robotics envs
 minari==0.4.*                # for offline RL / BC datasets
 dm_env==1.6                  # used by some TorchRL wrappers

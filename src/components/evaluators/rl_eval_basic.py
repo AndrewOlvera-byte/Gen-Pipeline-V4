@@ -2,7 +2,6 @@ from __future__ import annotations
 import numpy as np, torch
 from src.core.registry import register
 from torchrl.envs.utils import ExplorationType, set_exploration_type
-from torchrl.data import TensorDict
 
 @register("evaluator", "rl_eval_basic")
 class RLEvalFactory:

@@ -75,7 +75,14 @@ class OfflineLogger(BaseLogger):
         return self._policy == "train"
 
 def make_logger(cfg) -> BaseLogger:
-    name = cfg.logger.name
+    # Support flat and nested logger configs
+    def _maybe_get(obj, name):
+        try:
+            return getattr(obj, name)
+        except Exception:
+            return None
+    logger_node = _maybe_get(cfg, "logger") or _maybe_get(_maybe_get(cfg, "exp"), "logger") or {}
+    name = getattr(logger_node, "name", None) or getattr(cfg, "mode", None) or "offline"
     if name == "wandb":
         return WandbLogger(cfg)
     if name == "offline" or name == "csv":

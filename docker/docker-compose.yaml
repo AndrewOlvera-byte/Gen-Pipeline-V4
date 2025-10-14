@@ -1,5 +1,3 @@
-version: "3.9"
-
 # Reusable base settings (DRY via anchors)
 x-trainer-common: &trainer-common
   build:
@@ -9,6 +7,8 @@ x-trainer-common: &trainer-common
       BASE_IMAGE: ${BASE_IMAGE-}   # optional override at build time
   image: rlds-trainer:latest
   working_dir: /app
+  # Enable GPU in local docker compose (not swarm)
+  gpus: all
   deploy:
     resources:
       reservations:

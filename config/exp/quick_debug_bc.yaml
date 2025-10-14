@@ -1,10 +1,11 @@
+package: _global_
 defaults:
-  - trainer: bc
-  - dataset: minari
-  - model: mlp_gauss
-  - loss: bc_gaussian_nll
-  - optimizer: adamw
-  - evaluator: default_eval
+  - /trainer: bc
+  - /dataset: minari
+  - /model: mlp_gauss
+  - /loss: bc_gaussian_nll
+  - /optimizer: adamw
+  - /evaluator: default_eval
   - _self_
 
 exp:

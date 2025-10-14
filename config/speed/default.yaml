@@ -2,3 +2,4 @@ speed:
   allow_tf32: true
   cudnn_benchmark: true
   cudnn_deterministic: false
+  accelerator: gpu  # cpu | auto | gpu

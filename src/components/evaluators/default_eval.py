@@ -6,8 +6,26 @@ from src.core.registry import register
 @register("evaluator", "default_eval")
 class DefaultEvaluatorFactory:
     def build(self, cfg_node, context):
+        def _maybe_get(obj, name):
+            try:
+                return getattr(obj, name)
+            except Exception:
+                return None
+        def _get_dataset_cfg(cfg):
+            ds = _maybe_get(cfg, "dataset")
+            if ds is not None:
+                return ds
+            exp = _maybe_get(cfg, "exp")
+            if exp is not None:
+                ds = _maybe_get(exp, "dataset")
+                if ds is not None:
+                    return ds
+            return None
+
         valid_ds = context["dataset"]["valid"]
-        bs = context["cfg"].dataset.batch_size
+        cfg = context["cfg"]
+        ds_cfg = _get_dataset_cfg(cfg)
+        bs = int(getattr(ds_cfg, "batch_size", 32)) if ds_cfg is not None else 32
         dl = DataLoader(valid_ds, batch_size=bs, shuffle=False, num_workers=0)
         @torch.no_grad()
         def run(model):

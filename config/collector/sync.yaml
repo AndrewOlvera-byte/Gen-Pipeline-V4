@@ -1,5 +1,5 @@
 collector:
-  name: "sync"
+  name: "torchrl_sync"
   frames_per_batch: 2048
   total_frames: 1000000
   policy_update_steps: 4

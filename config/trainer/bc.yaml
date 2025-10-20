@@ -3,4 +3,7 @@ trainer:
   max_steps: 100000
   eval_every: 5000
   save_every: 20000
-  checkpoint_dir: "outputs/${exp.name}/ckpts"
+  lr_scheduler:
+    name: cosine
+    T_max: 100000
+    warmup: 1000

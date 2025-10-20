@@ -1,6 +1,0 @@
-logger:
-  name: "wandb"
-  project: "gen-repo"
-  run_name: "${exp.name}"
-  mode: "online"
-  log_interval: 100

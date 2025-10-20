@@ -16,3 +16,7 @@
 /scripts/__pycache__
 /src/components/datasets/__pycache__
 /outputs
+/.cursor
+DEPENDENCY_RESOLUTION.md
+OPTIMIZATION_SUMMARY.md
+/reports

@@ -55,6 +55,12 @@ class ProgressLogger:
     def elapsed_seconds(self) -> float:
         return float(time.time() - self.start_time)
 
+    def samples_per_sec(self, processed: int) -> float:
+        secs = self.elapsed_seconds()
+        if secs <= 0:
+            return 0.0
+        return float(processed) / float(secs)
+
     def save_plot(self, filename: str = "graph.png", keys: Optional[List[str]] = None):
         if not self.metrics:
             return None

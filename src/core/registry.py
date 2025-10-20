@@ -3,7 +3,7 @@ from typing import Any, Callable, Dict
 
 REG: Dict[str, Dict[str, Any]] = {
     k: {} for k in [
-        "env", "dataset", "datacoll", "model", "loss", "collector", "replay",
+        "env", "dataset", "datacoll", "model", "loss", "collector",
         "optimizer", "evaluator", "logger", "algo", "trainer"
     ]
 }
@@ -26,6 +26,9 @@ def register(kind: str, name: str):
 
 def get(kind: str, name: str) -> Any:
     return REG[kind][name]
+
+def available(kind: str) -> Dict[str, Any]:
+    return dict(REG.get(kind, {}))
 
 def available(kind: str) -> Dict[str, Any]:
     return dict(REG.get(kind, {}))

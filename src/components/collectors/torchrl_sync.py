@@ -19,11 +19,13 @@ class TorchRLSyncCollectorFactory:
         # Ensure actor is in 'sampling' exploration mode during collection
         set_exploration_type(ExplorationType.RANDOM)
 
+        frames_per_batch = int(getattr(cfg_node, "frames_per_batch", 32768))
+        total_frames = int(getattr(cfg_node, "total_frames", 1_000_000))
         collector = SyncDataCollector(
             env,
             policy=actor,
-            frames_per_batch=int(cfg_node.frames_per_batch),
-            total_frames=int(cfg_node.total_frames or 1_000_000),
+            frames_per_batch=frames_per_batch,
+            total_frames=total_frames,
             device=device,
             storing_device=device,  # keep on device for speed
         )

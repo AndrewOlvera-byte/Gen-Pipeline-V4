@@ -4,10 +4,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     MUJOCO_GL=egl \
-    TORCH_ALLOW_TF32_CUBLAS=1
+    TORCH_ALLOW_TF32_CUBLAS=1 \
+    CUDA_MODULE_LOADING=LAZY \
+    TORCH_CUDNN_V8_API_ENABLED=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       git curl ca-certificates \
+      build-essential g++ gcc \
       libgl1-mesa-glx libglfw3 libosmesa6 libglew-dev patchelf \
     && rm -rf /var/lib/apt/lists/*
 

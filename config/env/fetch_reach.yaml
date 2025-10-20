@@ -1,4 +1,5 @@
 env:
-  name: "torchrl_gym"
+  name: "torchrl_vectorized"
   id: "FetchReach-v2"
+  num_envs: 8
   kwargs: {}

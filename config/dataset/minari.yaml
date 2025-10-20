@@ -4,3 +4,6 @@ dataset:
   path: "data/fetchreach_v2_expert_bc_v1"
   batch_size: 128
   num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 4

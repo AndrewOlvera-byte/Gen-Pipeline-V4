@@ -45,7 +45,7 @@ def bootstrap():
     # trainers (bc, ppo, ssl, …)
     _import_all_from("src.trainers")
 
-    # components: envs, datasets, datacolls, models, losses, collectors, replays,
+    # components: envs, datasets, datacolls, models, losses, collectors,
     #             optimizers, evaluators, loggers
     _import_all_from("src.components", subpackages=[
         "envs",
@@ -54,7 +54,6 @@ def bootstrap():
         "models",
         "losses",
         "collectors",
-        "replays",
         "optimizers",
         "evaluators",
         "loggers",

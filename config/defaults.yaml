@@ -3,7 +3,7 @@ defaults:
   - modes: train
   - speed: default
   - seed: default
-  - logger: wandb
+  - logger: offline
   - _self_
 
 hydra:

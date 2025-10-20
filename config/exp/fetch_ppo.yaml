@@ -3,7 +3,7 @@ defaults:
   - env: fetch_reach
   - model: td_actor_critic
   - loss: ppo
-  - collector: torchrl_sync
+  - collector: async
   - optimizer: adam
   - evaluator: rl_eval_basic
   - _self_
@@ -17,6 +17,6 @@ trainer:
   save_every: 20000
 
 collector:
-  frames_per_batch: 2048
+  frames_per_batch: 8192
   total_frames: 1000000
-  policy_update_steps: 4
+  num_workers: 4

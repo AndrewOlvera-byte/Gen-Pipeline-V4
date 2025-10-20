@@ -19,8 +19,6 @@ x-trainer-common: &trainer-common
     - ../:/app
     - ../outputs:/app/outputs
   environment:
-    - WANDB_MODE=${WANDB_MODE:-online}
-    - WANDB_API_KEY=${WANDB_API_KEY:-}
     - MUJOCO_GL=egl
     - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
     - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:-all}
@@ -39,3 +37,8 @@ services:
     <<: *trainer-common
     profiles: ["search"]
     command: ["python", "scripts/search.py", "-m", "+hpo=optuna", "+hpo.space=ppo_basic"]
+
+  eval:
+    <<: *trainer-common
+    profiles: ["eval"]
+    command: ["python", "scripts/eval.py"]
